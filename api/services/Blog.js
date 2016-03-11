@@ -4,11 +4,11 @@ var Schema = mongoose.Schema;
 var Schema = new Schema({
     title: String,
     timestamp: Date,
-    user: {
+    user: [{
         type: Schema.ObjectId,
         ref: 'User',
         index: true
-    },
+    }],
     content: String,
     status: String
 });

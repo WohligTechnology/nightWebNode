@@ -14,18 +14,18 @@ module.exports = {
      * `DocumentationCategoryController.create()`
      */
     create: function (req, res) {
-     function callback(err, data) {
-         Config.GlobalCallback(err, data, res);
-     }
-     if (req.body) {
-         DocumentationCategory.create(req.body, callback);
-     } else {
-         res.json({
-             value: false,
-             comment: "No data found"
-         });
-     }
- },
+        function callback(err, data) {
+            Config.GlobalCallback(err, data, res);
+        }
+        if (req.body) {
+            DocumentationCategory.create(req.body, callback);
+        } else {
+            res.json({
+                value: false,
+                comment: "No data found"
+            });
+        }
+    },
 
 
     /**
