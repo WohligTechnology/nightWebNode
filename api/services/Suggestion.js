@@ -7,7 +7,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Schema = new Schema({
+var schema = new Schema({
     user: [{
         type: Schema.ObjectId,
         ref: 'User',
@@ -20,7 +20,7 @@ var Schema = new Schema({
     query: String
 });
 
-module.exports = mongoose.model('Suggestion', Schema);
+module.exports = mongoose.model('Suggestion', schema);
 
 var models = {
     //create
@@ -67,7 +67,7 @@ var models = {
             }
         });
     },
-    
+
      findlimited: function (data, callback) {
         var returnData = {};
         var checkfor = new RegExp(data.search, "i");

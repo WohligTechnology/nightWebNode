@@ -1,13 +1,13 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Schema = new Schema({
+var schema = new Schema({
   name: String,
   status: String,
   description: String
 });
 
-module.exports = mongoose.model('DocumentationCategory', Schema);
+module.exports = mongoose.model('DocumentationCategory', schema);
 
 var models = {
   //create

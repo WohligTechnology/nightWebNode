@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Schema = new Schema({
+var schema = new Schema({
 
     DocumentationCategory: [{
         type: Schema.ObjectId,
@@ -13,7 +13,7 @@ var Schema = new Schema({
     status: String
 });
 
-module.exports = mongoose.model('Documentation', Schema);
+module.exports = mongoose.model('Documentation', schema);
 
 var models = {
     //create

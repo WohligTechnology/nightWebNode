@@ -7,7 +7,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Schema = new Schema({
+var schema = new Schema({
     name: String,
     email: String,
     password: String,
@@ -20,7 +20,7 @@ var Schema = new Schema({
     contact: String
 });
 
-module.exports = mongoose.model('User', Schema);
+module.exports = mongoose.model('User', schema);
 
 var models = {
     // create
@@ -47,7 +47,7 @@ var models = {
             forgotpassword:0
         }).exec(callback);
     },
-    
+
       //    view one
 
     view: function (data, callback) {

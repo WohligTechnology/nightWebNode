@@ -7,7 +7,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Schema = new Schema({
+var schema = new Schema({
     user: [{
         type: Schema.ObjectId,
         ref: 'User',
@@ -20,7 +20,7 @@ var Schema = new Schema({
     status: String,
 });
 
-module.exports = mongoose.model('Usernotification', Schema);
+module.exports = mongoose.model('Usernotification', schema);
 
 var models = {
     //create

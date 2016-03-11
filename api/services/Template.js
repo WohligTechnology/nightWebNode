@@ -7,7 +7,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Schema = new Schema({
+var schema = new Schema({
     name: String,
     image: String,
     text: String,
@@ -15,10 +15,10 @@ var Schema = new Schema({
     images: String,
 });
 
-module.exports = mongoose.model('Template', Schema);
+module.exports = mongoose.model('Template', schema);
 
 var models = {
-    // create 
+    // create
     create: function (data, callback) {
         var template = this(data);
         if (data._id) {
@@ -39,7 +39,7 @@ var models = {
     viewAll: function (data, callback) {
         this.find().exec(callback);
     },
-    
+
       //    view one
 
     view: function (data, callback) {

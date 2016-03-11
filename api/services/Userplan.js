@@ -7,7 +7,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Schema = new Schema({
+var schema = new Schema({
     user: [{
         type: Schema.ObjectId,
         ref: 'User',
@@ -25,7 +25,7 @@ var Schema = new Schema({
     foldername: String
 });
 
-module.exports = mongoose.model('Userplan', Schema);
+module.exports = mongoose.model('Userplan', schema);
 
 var models = {
     //create
@@ -46,11 +46,11 @@ var models = {
         }
     },
     // viewall
-    
+
     viewAll: function (data, callback) {
         this.find().exec(callback);
     },
-    
+
     //    view one
 
     view: function (data, callback) {
@@ -58,7 +58,7 @@ var models = {
                 "_id": data._id
             }).exec(callback);
         },
-    
+
         // delete
 
     delete: function (data, callback) {
@@ -73,7 +73,7 @@ var models = {
             }
         });
     },
-        
+
     // view by user
 
     viewByUser: function (data, callback) {

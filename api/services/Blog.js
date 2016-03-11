@@ -1,24 +1,24 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Schema = new Schema({
+var schema = new Schema({
     title: String,
     timestamp: Date,
-    user: [{
+    user: {
         type: Schema.ObjectId,
-        ref: 'User',
-        index: true
-    }],
+        ref: 'User'
+    },
     content: String,
     status: String
 });
 
-module.exports = mongoose.model('Blog', Schema);
+module.exports = mongoose.model('Blog', schema);
 
 var models = {
     //create
     create: function (data, callback) {
         var obj = this(data);
+        obj.timestamp = Date();
         if (data._id) {
             this.findOneAndUpdate({
                 _id: data._id
@@ -36,7 +36,7 @@ var models = {
 
     // viewall
     viewAll: function (data, callback) {
-        this.find().exec(callback);
+        this.find().populate("user").sort({ timestamp: -1 }).exec(callback);
     },
 
     //    view one
@@ -44,7 +44,7 @@ var models = {
     view: function (data, callback) {
         this.findOne({
             "_id": data._id
-        }).exec(callback);
+        }).populate("user").exec(callback);
     },
 
     // delete
