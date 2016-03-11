@@ -8,18 +8,7 @@ var Schema = new Schema({
     ref: 'DocumentationCategory',
     index: true
   },
-  title
-  content
-  status
-
-
   title: String,
-  timestamp: Date,
-  user: {
-    type: Schema.ObjectId,
-    ref: 'User',
-    index: true
-  },
   content: String,
   status: String
 });
