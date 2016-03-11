@@ -12,13 +12,13 @@ module.exports = mongoose.model('DocumentationCategory', Schema);
 var models = {
   //create
   create: function(data, callback) {
-    var plan = this(data);
+    var obj = this(data);
     if (data._id) {
       this.findOneAndUpdate({
         _id: data._id
       }, data, callback);
     } else {
-      this.save(function(err, data) {
+      obj.save(function(err, data) {
         if (err) {
           callback(err, false);
         } else {
