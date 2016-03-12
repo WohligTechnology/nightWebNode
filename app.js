@@ -23,7 +23,8 @@
 process.chdir(__dirname);
 var mongoose;
 mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/blazeback', function(err) {
+var dbString = 'mongodb://localhost:27017/blazeback';
+mongoose.connect(dbString, function(err) {
   if (err) {
     console.log(err);
   }
