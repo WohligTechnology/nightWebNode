@@ -31,7 +31,7 @@ module.exports = {
   uploadFile: function(filename, callback) {
 
     var id = mongoose.Types.ObjectId();
-    var extension = filename.split(".")[1];
+    var extension = filename.split(".").pop();
     var newFilename = id + "." + extension;
     var writestream = gfs.createWriteStream({
       filename: newFilename
@@ -45,6 +45,7 @@ module.exports = {
       callback(null, {
         name: newFilename
       });
+      fs.unlink(filename);
     });
   },
   readUploaded: function(filename, res) {

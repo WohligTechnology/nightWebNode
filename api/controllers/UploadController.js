@@ -6,11 +6,27 @@
  */
 
 module.exports = {
-  upload: function(req, res) {
-    function callback(err, data) {
-      Config.GlobalCallback(err, data, res);
+  index: function(req, res) {
+    function callback2(err) {
+      Config.GlobalCallback(err, fileNames, res);
     }
-    Config.uploadFile("Z.jpg", callback);
+    var fileNames = [];
+    req.file("file").upload(function(err, uploadedFile) {
+      async.each(uploadedFile, function(n, callback) {
+        Config.uploadFile(n.fd, function(err, value) {
+          if (err) {
+            callback(err);
+          }
+					else {
+						fileNames.push(value.name);
+						callback(null);
+					}
+        });
+      }, callback2);
+
+    });
+
+
   },
   readFile: function(req, res) {
     Config.readUploaded(req.query.file, res);
