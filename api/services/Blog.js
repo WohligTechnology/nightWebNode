@@ -18,7 +18,7 @@ var models = {
     //create
     create: function (data, callback) {
         var obj = this(data);
-        obj.timestamp = Date();
+        obj.timestamp =new Date();
         if (data._id) {
             this.findOneAndUpdate({
                 _id: data._id

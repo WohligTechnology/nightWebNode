@@ -58,5 +58,11 @@ module.exports = {
             Config.GlobalCallback(err, data, res);
         }
         User.view(req.body, callback);
+    },
+    findlimited: function (req, res) {
+        function callback(err, data) {
+            Config.GlobalCallback(err, data, res);
+        }
+        User.findlimited(req.body, callback);
     }
 };

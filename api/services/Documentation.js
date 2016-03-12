@@ -17,13 +17,13 @@ module.exports = mongoose.model('Documentation', schema);
 var models = {
   //create
   create: function(data, callback) {
-    var obj = this(data);
+    var documentation = this(data);
     if (data._id) {
       this.findOneAndUpdate({
         _id: data._id
       }, data, callback);
     } else {
-      obj.save(function(err, data) {
+      documentation.save(function(err, data) {
         if (err) {
           callback(err, false);
         } else {
@@ -32,6 +32,8 @@ var models = {
       });
     }
   },
+    
+    
 
   // viewall
   viewAll: function(data, callback) {

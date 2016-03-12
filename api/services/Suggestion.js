@@ -43,7 +43,7 @@ var models = {
 
   // viewall
   viewAll: function(data, callback) {
-    this.find().exec(callback);
+    this.find().populate("User").sort({ timestamp: -1 }).exec(callback);
   },
 
   //    view one
