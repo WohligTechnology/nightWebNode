@@ -60,43 +60,13 @@ module.exports = {
         }
         User.view(req.body, callback);
     },
-    findlimited: function (req, res) {
+     findlimited: function (req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        User.findlimited(req.body, callback);
-
-  /**
-   * `UserController.delete()`
-   */
-  delete: function(req, res) {
-    function callback(err, data) {
-      Config.GlobalCallback(err, data, res);
+        Plan.findlimited(req.body, callback);
     }
-    User.delete(req.body, callback);
-  },
 
-
-  /**
-   * `UserController.viewAll()`
-   */
-  viewAll: function(req, res) {
-    function callback(err, data) {
-      Config.GlobalCallback(err, data, res);
-    }
-    User.viewAll(req.body, callback);
-  },
-
-
-  /**
-   * `UserController.view()`
-   */
-  view: function(req, res) {
-    function callback(err, data) {
-      Config.GlobalCallback(err, data, res);
-    }
-    User.view(req.body, callback);
-  },
 
   
 };
