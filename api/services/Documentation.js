@@ -35,7 +35,7 @@ var models = {
 
   // viewall
   viewAll: function(data, callback) {
-    this.find().exec(callback);
+    this.find().populate("DocumentationCategory").exec(callback);
   },
 
   //    view one
@@ -43,7 +43,7 @@ var models = {
   view: function(data, callback) {
     this.findOne({
       "_id": data._id
-    }).exec(callback);
+    }).populate("DocumentationCategory").exec(callback);
   },
 
   // delete
