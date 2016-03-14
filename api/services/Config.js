@@ -110,11 +110,10 @@ module.exports = {
       fs.unlink(filename);
     });
   },
-  readUploaded: function(filename, width, height, res) {
+  readUploaded: function(filename, width, height, style, res) {
     var readstream = gfs.createReadStream({
       filename: filename
     });
-
     readstream.on('error', function(err) {
       res.json({
         value: false,
@@ -132,7 +131,6 @@ module.exports = {
       });
       fs.createReadStream(filename).pipe(res);
       fs.createReadStream(filename).pipe(writestream2);
-
     }
 
     function read2(filename2) {
@@ -147,7 +145,6 @@ module.exports = {
       });
       readstream2.pipe(res);
     }
-
     var onlyName = filename.split(".")[0];
     var extension = filename.split(".").pop();
     if ((extension == "jpg" || extension == "png" || extension == "gif") && ((width && width > 0) || (height && height > 0))) {
@@ -163,12 +160,15 @@ module.exports = {
       } else {
         newName += "-" + 0;
       }
+      if (style && (style == "fill" || style == "cover")) {
+        newName += "-" + style;
+      } else {
+        newName += "-" + 0;
+      }
       var newNameExtire = newName + "." + extension;
-
       gfs.exist({
         filename: newNameExtire
       }, function(err, found) {
-
         if (err) {
           res.json({
             value: false,
@@ -178,9 +178,6 @@ module.exports = {
         if (found) {
           read2(newNameExtire);
         } else {
-
-
-
           var imageStream = fs.createWriteStream('./.tmp/uploads/' + filename);
           readstream.pipe(imageStream);
           imageStream.on("finish", function() {
@@ -189,10 +186,31 @@ module.exports = {
               ImageHeight = image.height();
               var newWidth = 0;
               var newHeight = 0;
-
+              var pRatio = width / height;
+              var iRatio = ImageWidth / ImageHeight;
               if (width && height) {
                 newWidth = width;
                 newHeight = height;
+                switch (style) {
+                  case "fill":
+                    if (pRatio > iRatio) {
+                      newHeight = height;
+                      newWidth = height * (ImageWidth / ImageHeight);
+                    } else {
+                      newWidth = width;
+                      newHeight = width / (ImageWidth / ImageHeight);
+                    }
+                    break;
+                  case "cover":
+                    if (pRatio < iRatio) {
+                      newHeight = height;
+                      newWidth = height * (ImageWidth / ImageHeight);
+                    } else {
+                      newWidth = width;
+                      newHeight = width / (ImageWidth / ImageHeight);
+                    }
+                    break;
+                }
               } else if (width) {
                 newWidth = width;
                 newHeight = width / (ImageWidth / ImageHeight);
@@ -200,7 +218,6 @@ module.exports = {
                 newWidth = height * (ImageWidth / ImageHeight);
                 newHeight = height;
               }
-
               image.resize(parseInt(newWidth), parseInt(newHeight), function(err, image2) {
                 image2.writeFile('./.tmp/uploads/' + filename, function(err) {
                   writer2('./.tmp/uploads/' + filename, newNameExtire, {
@@ -214,15 +231,9 @@ module.exports = {
         }
       });
       //else create a resized image and serve
-
-      //
     } else {
       readstream.pipe(res);
     }
-
     //error handling, e.g. file does not exist
-
-
-
   }
 };

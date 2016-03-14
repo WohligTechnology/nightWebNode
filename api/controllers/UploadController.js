@@ -12,7 +12,7 @@ module.exports = {
     }
     var fileNames = [];
     req.file("file").upload({
-      maxBytes: 10000000  // 10 MB Storage 1 MB = 10^6
+      maxBytes: 10000000 // 10 MB Storage 1 MB = 10^6
     }, function(err, uploadedFile) {
       async.each(uploadedFile, function(n, callback) {
         Config.uploadFile(n.fd, function(err, value) {
@@ -27,6 +27,6 @@ module.exports = {
     });
   },
   readFile: function(req, res) {
-    Config.readUploaded(req.query.file,req.query.width,req.query.height, res);
+    Config.readUploaded(req.query.file, req.query.width, req.query.height, req.query.style, res);
   }
 };
