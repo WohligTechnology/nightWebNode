@@ -14,8 +14,6 @@ var MaxImageSize = 1200;
 var gfs = Grid(mongoose.connections[0].db, mongoose);
 gfs.mongo = mongoose.mongo;
 
-
-
 module.exports = {
   GlobalCallback: function(err, data, res) {
     if (err) {
