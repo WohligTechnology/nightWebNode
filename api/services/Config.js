@@ -130,8 +130,9 @@ module.exports = {
       writestream2.on('finish', function() {
         fs.unlink(filename);
       });
-      fs.createReadStream(filename).pipe(writestream2);
       fs.createReadStream(filename).pipe(res);
+      fs.createReadStream(filename).pipe(writestream2);
+
     }
 
     function read2(filename2) {
