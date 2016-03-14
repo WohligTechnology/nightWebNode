@@ -8,6 +8,7 @@
 var mongoose = require('mongoose');
 var Grid = require('gridfs-stream');
 var fs = require("fs");
+var lwip = require("lwip");
 
 var gfs = Grid(mongoose.connections[0].db, mongoose);
 gfs.mongo = mongoose.mongo;
@@ -32,15 +33,63 @@ module.exports = {
 
     var id = mongoose.Types.ObjectId();
     var extension = filename.split(".").pop();
+    extension = extension.toLowerCase();
+    if (extension == "jpeg") {
+      extension = "jpg";
+    }
     var newFilename = id + "." + extension;
+
     var writestream = gfs.createWriteStream({
       filename: newFilename
     });
-    fs.createReadStream(filename).pipe(writestream);
-    // res.json({name:"Chintan"});
-    writestream.on('error', function(err) {
-      callback(err, null);
-    });
+    var imageStream = fs.createReadStream(filename);
+
+    if (extension == "png" || extension == "jpg" || extension == "gif") {
+      lwip.open(filename, extension, function(err, image) {
+        var upImage = {
+          width: image.width(),
+          height: image.height()
+        };
+        console.log(imageStream);
+        if (upImage.width > upImage.height) {
+          if (upImage.width > 1200) {
+            image.resize(1200, 1200 / (upImage.width / upImage.height), function(err, image2) {
+              image2.writeFile(filename, function(err) {
+                fs.createReadStream(filename).pipe(writestream);
+              });
+            });
+          } else {
+            imageStream.pipe(writestream);
+          }
+        } else {
+          if (upImage.height > 1200) {
+            image.resize((upImage.width / upImage.height) / 1200, 1200, function(err, image2) {
+              image2.toBuffer(extension, function(err, buffer) {
+                fs.createReadStream(filename).pipe(writestream);
+              });
+            });
+          } else {
+            imageStream.pipe(writestream);
+          }
+        }
+      });
+    } else {
+      imageStream.pipe(writestream);
+    }
+
+
+
+
+
+    // stream.read();
+    // stream.on('error', function(err) {
+    //   console.log(err);
+    // });
+    // stream.on("end", function() {
+    //   console.log("Going Inside");
+
+    // });
+
     writestream.on('finish', function() {
       callback(null, {
         name: newFilename

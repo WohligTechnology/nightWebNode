@@ -24,10 +24,7 @@ module.exports = {
           }
         });
       }, callback2);
-
     });
-
-
   },
   readFile: function(req, res) {
     Config.readUploaded(req.query.file, res);

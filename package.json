@@ -21,6 +21,7 @@
     "grunt-sails-linker": "~0.10.1",
     "grunt-sync": "0.2.4",
     "include-all": "~0.1.6",
+    "lwip": "0.0.8",
     "mongoose": "^4.4.6",
     "rc": "1.0.1",
     "sails": "~0.12.1",
