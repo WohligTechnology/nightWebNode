@@ -45,51 +45,63 @@ module.exports = {
     });
     var imageStream = fs.createReadStream(filename);
 
+    function writer2(metaValue) {
+      var writestream2 = gfs.createWriteStream({
+        filename: newFilename,
+        metadata: metaValue
+      });
+      writestream2.on('finish', function() {
+        callback(null, {
+          name: newFilename
+        });
+        fs.unlink(filename);
+      });
+      fs.createReadStream(filename).pipe(writestream2);
+    }
+
     if (extension == "png" || extension == "jpg" || extension == "gif") {
       lwip.open(filename, extension, function(err, image) {
         var upImage = {
           width: image.width(),
-          height: image.height()
+          height: image.height(),
+          ratio: image.width() / image.height()
         };
-        console.log(imageStream);
+
         if (upImage.width > upImage.height) {
           if (upImage.width > MaxImageSize) {
             image.resize(MaxImageSize, MaxImageSize / (upImage.width / upImage.height), function(err, image2) {
+              upImage = {
+                width: image2.width(),
+                height: image2.height(),
+                ratio: image2.width() / image.height()
+              };
               image2.writeFile(filename, function(err) {
-                fs.createReadStream(filename).pipe(writestream);
+                writer2(upImage);
               });
             });
           } else {
-            imageStream.pipe(writestream);
+            writer2(upImage);
           }
         } else {
           if (upImage.height > MaxImageSize) {
             image.resize((upImage.width / upImage.height) / MaxImageSize, MaxImageSize, function(err, image2) {
-              image2.toBuffer(extension, function(err, buffer) {
-                fs.createReadStream(filename).pipe(writestream);
+              upImage = {
+                width: image2.width(),
+                height: image2.height(),
+                ratio: image2.width() / image.height()
+              };
+              image2.writeFile(filename, function(err) {
+                writer2(upImage);
               });
             });
           } else {
-            imageStream.pipe(writestream);
+            writer2(upImage);
           }
         }
       });
     } else {
       imageStream.pipe(writestream);
     }
-
-
-
-
-
-    // stream.read();
-    // stream.on('error', function(err) {
-    //   console.log(err);
-    // });
-    // stream.on("end", function() {
-    //   console.log("Going Inside");
-
-    // });
 
     writestream.on('finish', function() {
       callback(null, {
@@ -98,20 +110,119 @@ module.exports = {
       fs.unlink(filename);
     });
   },
-  readUploaded: function(filename, res) {
+  readUploaded: function(filename, width, height, res) {
     var readstream = gfs.createReadStream({
       filename: filename
     });
 
-    //error handling, e.g. file does not exist
-
     readstream.on('error', function(err) {
-      console.log('An error occurred!', err);
       res.json({
         value: false,
         error: err
       });
     });
-    readstream.pipe(res);
+
+    function writer2(filename, gridFSFilename, metaValue) {
+      var writestream2 = gfs.createWriteStream({
+        filename: gridFSFilename,
+        metadata: metaValue
+      });
+      writestream2.on('finish', function() {
+
+        fs.unlink(filename);
+      });
+      fs.createReadStream(filename).pipe(writestream2);
+      fs.createReadStream(filename).pipe(res);
+    }
+
+    function read2(filename2) {
+      var readstream2 = gfs.createReadStream({
+        filename: filename2
+      });
+      readstream2.on('error', function(err) {
+        res.json({
+          value: false,
+          error: err
+        });
+      });
+      readstream2.pipe(res);
+    }
+
+    var onlyName = filename.split(".")[0];
+    var extension = filename.split(".").pop();
+    if ((extension == "jpg" || extension == "png" || extension == "gif") && ((width && width > 0) || (height && height > 0))) {
+      //attempt to get same size image and serve
+      var newName = onlyName;
+      if (width > 0) {
+        newName += "-" + width;
+      } else {
+        newName += "-" + 0;
+      }
+      if (height) {
+        newName += "-" + height;
+      } else {
+        newName += "-" + 0;
+      }
+      var newNameExtire = newName + "." + extension;
+
+      gfs.exist({
+        filename: newNameExtire
+      }, function(err, found) {
+
+        if (err) {
+          res.json({
+            value: false,
+            error: err
+          });
+        }
+        if (found) {
+          read2(newNameExtire);
+        } else {
+
+
+
+          var imageStream = fs.createWriteStream('./.tmp/uploads/' + filename);
+          readstream.pipe(imageStream);
+          imageStream.on("finish", function() {
+            lwip.open('./.tmp/uploads/' + filename, function(err, image) {
+              ImageWidth = image.width();
+              ImageHeight = image.height();
+              var newWidth = 0;
+              var newHeight = 0;
+
+              if (width && height) {
+                newWidth = width;
+                newHeight = height;
+              } else if (width) {
+                newWidth = width;
+                newHeight = width / (ImageWidth / ImageHeight);
+              } else if (height) {
+                newWidth = height * (ImageWidth / ImageHeight);
+                newHeight = height;
+              }
+
+              image.resize(parseInt(newWidth), parseInt(newHeight), function(err, image2) {
+                image2.writeFile('./.tmp/uploads/' + filename, function(err) {
+                  writer2('./.tmp/uploads/' + filename, newNameExtire, {
+                    width: newWidth,
+                    height: newHeight
+                  });
+                });
+              });
+            });
+          });
+        }
+      });
+      //else create a resized image and serve
+
+      //
+    } else {
+      readstream.pipe(res);
+    }
+
+    //error handling, e.g. file does not exist
+
+
+
   }
 };

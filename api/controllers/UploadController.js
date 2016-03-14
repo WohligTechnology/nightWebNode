@@ -27,6 +27,6 @@ module.exports = {
     });
   },
   readFile: function(req, res) {
-    Config.readUploaded(req.query.file, res);
+    Config.readUploaded(req.query.file,req.query.width,req.query.height, res);
   }
 };
