@@ -9,6 +9,7 @@ var mongoose = require('mongoose');
 var Grid = require('gridfs-stream');
 var fs = require("fs");
 var lwip = require("lwip");
+var MaxImageSize = 1200;
 
 var gfs = Grid(mongoose.connections[0].db, mongoose);
 gfs.mongo = mongoose.mongo;
@@ -52,8 +53,8 @@ module.exports = {
         };
         console.log(imageStream);
         if (upImage.width > upImage.height) {
-          if (upImage.width > 1200) {
-            image.resize(1200, 1200 / (upImage.width / upImage.height), function(err, image2) {
+          if (upImage.width > MaxImageSize) {
+            image.resize(MaxImageSize, MaxImageSize / (upImage.width / upImage.height), function(err, image2) {
               image2.writeFile(filename, function(err) {
                 fs.createReadStream(filename).pipe(writestream);
               });
@@ -62,8 +63,8 @@ module.exports = {
             imageStream.pipe(writestream);
           }
         } else {
-          if (upImage.height > 1200) {
-            image.resize((upImage.width / upImage.height) / 1200, 1200, function(err, image2) {
+          if (upImage.height > MaxImageSize) {
+            image.resize((upImage.width / upImage.height) / MaxImageSize, MaxImageSize, function(err, image2) {
               image2.toBuffer(extension, function(err, buffer) {
                 fs.createReadStream(filename).pipe(writestream);
               });
