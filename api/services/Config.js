@@ -73,7 +73,7 @@ module.exports = {
               upImage = {
                 width: image2.width(),
                 height: image2.height(),
-                ratio: image2.width() / image.height()
+                ratio: image2.width() / image2.height()
               };
               image2.writeFile(filename, function(err) {
                 writer2(upImage);
@@ -84,11 +84,11 @@ module.exports = {
           }
         } else {
           if (upImage.height > MaxImageSize) {
-            image.resize((upImage.width / upImage.height) / MaxImageSize, MaxImageSize, function(err, image2) {
+            image.resize((upImage.width / upImage.height) * MaxImageSize, MaxImageSize, function(err, image2) {
               upImage = {
                 width: image2.width(),
                 height: image2.height(),
-                ratio: image2.width() / image.height()
+                ratio: image2.width() / image2.height()
               };
               image2.writeFile(filename, function(err) {
                 writer2(upImage);
