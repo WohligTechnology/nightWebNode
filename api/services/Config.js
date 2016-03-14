@@ -128,7 +128,6 @@ module.exports = {
         metadata: metaValue
       });
       writestream2.on('finish', function() {
-
         fs.unlink(filename);
       });
       fs.createReadStream(filename).pipe(writestream2);
