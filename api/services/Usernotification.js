@@ -73,36 +73,43 @@ var models = {
       "user": data.user
     }).populate('User').exec(callback);
   },
-  findlimited: function(data, callback) {
-    var returnData = {};
-    var checkfor = new RegExp(data.search, "i");
-    var pagesize = parseInt(data.pagesize);
-    var pagenumber = parseInt(data.pagenumber);
-    async.parallel([
-      function(callback) {
-        Usernotification.count({
-          name: {
-            '$regex': checkfor
-          }
-        }, callback);
-      },
-      function(callback) {
-        Usernotification.find({
-          name: {
-            '$regex': checkfor
-          }
-        }, callback);
-      }
-    ], function(err, data2) {
-      if (err) {
-        callback(err, null);
-      } else {
-        returnData.totalpages = Math.ceil(data2[0] / pagesize);
-        returnData.total = data2[0];
-        returnData.data = data2[1];
-        callback(null, returnData);
-      }
-    });
-  },
+   findlimited: function (data, callback) {
+        var returnData = {};
+        var checkfor = new RegExp(data.search, "i");
+        var pagesize = parseInt(data.pagesize);
+        var pagenumber = parseInt(data.pagenumber);
+        var sort={};
+        data.sortnum=parseInt(data.sortnum);
+        sort[data.sort]=data.sortnum;//sort in ascending
+        async.parallel([
+            function (callback) {
+                Usernotification.count({
+                    $or: [{
+                        status: {
+                            '$regex': checkfor
+                        }
+                    }]
+                }, callback);
+            },
+            function (callback) {
+                Usernotification.find({
+                    $or: [{
+                        status: {
+                            '$regex': checkfor
+                        }
+                    }]
+                },{},{sort:sort}).skip(pagesize*(pagenumber-1)).limit(pagesize).exec(callback);
+            }], function (err, data2) {
+            if (err) {
+                callback(err, null);
+            } else {
+                returnData.totalpages = Math.ceil(data2[0] / pagesize);
+                returnData.total = data2[0];
+                returnData.pageno = pagenumber;
+                returnData.data = data2[1];
+                callback(null, returnData);
+            }
+        });
+    },
 };
 module.exports = _.assign(module.exports, models);

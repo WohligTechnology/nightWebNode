@@ -64,7 +64,7 @@ module.exports = {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Plan.findlimited(req.body, callback);
+        User.findlimited(req.body, callback);
     }
 
 
