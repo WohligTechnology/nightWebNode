@@ -1,2 +1,2 @@
 rm -rf .tmp/public
-nodemon app.js
+nodemon app.js --prod
