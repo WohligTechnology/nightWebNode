@@ -63,6 +63,6 @@ module.exports = {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Suggestion.findlimited(req.body, callback);
+        Template.findlimited(req.body, callback);
     }
 };

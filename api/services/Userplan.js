@@ -88,7 +88,7 @@ var models = {
             "user": data.user
         }).populate('User').exec(callback);
     },
-   findlimited: function (data, callback) {
+  findlimited: function (data, callback) {
         var returnData = {};
         var checkfor = new RegExp(data.search, "i");
         var pagesize = parseInt(data.pagesize);
