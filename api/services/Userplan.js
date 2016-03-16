@@ -99,28 +99,12 @@ var models = {
         async.parallel([
             function (callback) {
                 Userplan.count({
-                    $or: [{
-                        user: {
-                            '$regex': checkfor
-                        }
-                    }, {
-                        plan: {
-                            '$regex': checkfor
-                        }
-                    }]
+                   foldername: checkfor
                 }, callback);
             },
             function (callback) {
                 Userplan.find({
-                    $or: [{
-                        user: {
-                            '$regex': checkfor
-                        }
-                    }, {
-                        plan: {
-                            '$regex': checkfor
-                        }
-                    }]
+                   foldername: checkfor
                 },{},{sort:sort}).skip(pagesize*(pagenumber-1)).limit(pagesize).exec(callback);
             }], function (err, data2) {
             if (err) {
