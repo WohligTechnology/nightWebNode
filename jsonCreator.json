@@ -1,0 +1,45 @@
+{
+  "pageTitle": "title of the page",
+  "breadcrumb": [{
+    "name": "name of the breadcrum",
+    "url": "state params of the url"
+  }, {
+    "name": "name of the breadcrum",
+    "url": "state params of the url"
+  }],
+  "type": "view/create/edit/delete/sidemenuinside",
+  "sidemenu": "Sidemenu Inside",
+  "sidemenuLinks": [{
+    "name": "name of the breadcrum",
+    "url": "state params of the url"
+  }, {
+    "name": "name of the breadcrum",
+    "url": "state params of the url"
+  }, {
+    "name": "name of the breadcrum",
+    "url": "state params of the url"
+  }, {
+    "name": "name of the breadcrum",
+    "url": "state params of the url"
+  }],
+  "variables": [{
+    "name": "name of variable",
+    "value": "value of variable"
+  }, {
+    "name": "name of variable",
+    "value": "value of variable"
+  }, {
+    "name": "name of variable",
+    "value": "value of variable"
+  }],
+  "fields": [{
+    "name": "name",
+    "type": "",
+    "validation":"",
+    "required":"",
+    "":""
+
+  }],
+
+
+}
