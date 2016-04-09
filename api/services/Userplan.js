@@ -88,35 +88,63 @@ var models = {
             "user": data.user
         }).populate('User').exec(callback);
     },
-  findlimited: function (data, callback) {
-        var returnData = {};
-        var checkfor = new RegExp(data.search, "i");
-        var pagesize = parseInt(data.pagesize);
-        var pagenumber = parseInt(data.pagenumber);
-        var sort={};
-        data.sortnum=parseInt(data.sortnum);
-        sort[data.sort]=data.sortnum;//sort in ascending
+    findlimited: function (data, callback) {
+        var newreturns = {};
+        newreturns.data = [];
+        var check = new RegExp(data.search, "i");
+        var sort = {};
+        data.sortnum = parseInt(data.sortnum);
+        sort[data.sort] = data.sortnum; //sort in ascending
+        data.pagenumber = parseInt(data.pagenumber);
+        data.pagesize = parseInt(data.pagesize);
         async.parallel([
-            function (callback) {
-                Userplan.count({
-                   foldername: checkfor
-                }, callback);
-            },
-            function (callback) {
-                Userplan.find({
-                   foldername: checkfor
-                },{},{sort:sort}).skip(pagesize*(pagenumber-1)).limit(pagesize).exec(callback);
-            }], function (err, data2) {
-            if (err) {
-                callback(err, null);
-            } else {
-                returnData.totalpages = Math.ceil(data2[0] / pagesize);
-                returnData.total = data2[0];
-                returnData.pageno = pagenumber;
-                returnData.data = data2[1];
-                callback(null, returnData);
-            }
-        });
+                function (callback) {
+                    Userplan.count({
+                        foldername: {
+                            '$regex': check
+                        }
+                    }).exec(function (err, number) {
+                        if (err) {
+                            console.log(err);
+                            callback(err, null);
+                        } else if (number && number != "") {
+                            newreturns.total = number;
+                            newreturns.totalpages = Math.ceil(number / data.pagesize);
+                            newreturns.pageno = data.pagenumber;
+                            callback(null, newreturns);
+                        } else {
+                            callback(null, newreturns);
+                        }
+                    });
+                },
+                function (callback) {
+                    Userplan.find({
+                        foldername: {
+                            '$regex': check
+                        }
+                    }, { sort: sort }).skip(data.pagesize * (data.pagenumber - 1)).limit(data.pagesize).exec(function (err, data2) {
+                        if (err) {
+                            console.log(err);
+                            callback(err, null);
+                        } else if (data2 && data2.length > 0) {
+                            newreturns.data = data2;
+                            callback(null, newreturns);
+                        } else {
+                            callback(null, newreturns);
+                        }
+                    });
+                }
+            ],
+            function (err, data4) {
+                if (err) {
+                    console.log(err);
+                    callback(err, null);
+                } else if (data4) {
+                    callback(null, newreturns);
+                } else {
+                    callback(null, newreturns);
+                }
+            });
     },
 };
 module.exports = _.assign(module.exports, models);

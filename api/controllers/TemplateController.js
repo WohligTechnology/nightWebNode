@@ -1,19 +1,11 @@
-
 /**
  * TemplateController
  *
- * @description :: Server-side logic for managing templates
+ * @description :: Server-side logic for managing Templates
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
 module.exports = {
-
-
-
-    /**
-     * `TemplateController.create()`
-     */
-    create: function (req, res) {
+    create: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
@@ -22,48 +14,81 @@ module.exports = {
         } else {
             res.json({
                 value: false,
-                comment: "No data found"
+                data: "Invalid Call"
             });
         }
     },
-
-
-
-    /**
-     * `TemplateController.delete()`
-     */
-    delete: function (req, res) {
+    delete: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Template.delete(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                Template.delete(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `TemplateController.viewAll()`
-     */
-    viewAll: function (req, res) {
+    viewAll: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Template.viewAll(req.body, callback);
+        if (req.body) {
+            Template.viewAll(req.body, callback);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `TemplateController.view()`
-     */
-    view: function (req, res) {
-      function callback(err, data) {
-          Config.GlobalCallback(err, data, res);
-      }
-      Template.view(req.body, callback);
-  },
-    findlimited: function (req, res) {
+    view: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Template.findlimited(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                Template.view(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
+    },
+    findlimited: function(req, res) {
+        function callback(err, data) {
+            Config.GlobalCallback(err, data, res);
+        }
+        if (req.body) {
+            if (req.body.pagesize && re.body.pagesize != "" && req.body.pagesize && re.body.pagesize != "") {
+                Template.findlimited(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     }
 };

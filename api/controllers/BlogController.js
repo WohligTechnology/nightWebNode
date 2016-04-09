@@ -4,16 +4,8 @@
  * @description :: Server-side logic for managing Blogs
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
-
-
-
 module.exports = {
-
-    /**
-     * `BlogController.create()`
-     */
-    create: function (req, res) {
+    create: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
@@ -22,47 +14,81 @@ module.exports = {
         } else {
             res.json({
                 value: false,
-                comment: "No data found"
+                data: "Invalid Call"
             });
         }
     },
-
-
-    /**
-     * `BlogController.delete()`
-     */
-    delete: function (req, res) {
+    delete: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Blog.delete(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                Blog.delete(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `BlogController.viewAll()`
-     */
-    viewAll: function (req, res) {
+    viewAll: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Blog.viewAll(req.body, callback);
+        if (req.body) {
+            Blog.viewAll(req.body, callback);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `BlogController.view()`
-     */
-    view: function (req, res) {
+    view: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Blog.view(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                Blog.view(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-    findlimited: function (req, res) {
+    findlimited: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Blog.findlimited(req.body, callback);
+        if (req.body) {
+            if (req.body.pagesize && re.body.pagesize != "" && req.body.pagesize && re.body.pagesize != "") {
+                Blog.findlimited(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     }
 };

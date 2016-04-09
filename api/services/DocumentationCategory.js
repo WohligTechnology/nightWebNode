@@ -2,104 +2,128 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
-  name: String,
-  status: String,
-  description: String
+    name: String,
+    status: String,
+    description: String
 });
 
 module.exports = mongoose.model('DocumentationCategory', schema);
 
 var models = {
-  //create
-  create: function(data, callback) {
-    var obj = this(data);
-    if (data._id) {
-      this.findOneAndUpdate({
-        _id: data._id
-      }, data, callback);
-    } else {
-      obj.save(function(err, data) {
-        if (err) {
-          callback(err, false);
+    //create
+    create: function (data, callback) {
+        var obj = this(data);
+        if (data._id) {
+            this.findOneAndUpdate({
+                _id: data._id
+            }, data, callback);
         } else {
-          callback(null, data);
+            obj.save(function (err, data) {
+                if (err) {
+                    callback(err, false);
+                } else {
+                    callback(null, data);
+                }
+            });
         }
-      });
-    }
-  },
+    },
 
-  // viewall
-  viewAll: function(data, callback) {
-    this.find().exec(callback);
-  },
+    // viewall
+    viewAll: function (data, callback) {
+        this.find().exec(callback);
+    },
 
-  //    view one
+    //    view one
 
-  view: function(data, callback) {
-    this.findOne({
-      "_id": data._id
-    }).exec(callback);
-  },
+    view: function (data, callback) {
+        this.findOne({
+            "_id": data._id
+        }).exec(callback);
+    },
 
-  // delete
+    // delete
 
-  delete: function(data, callback) {
-    this.findOneAndRemove({
-      _id: data._id
-    }, function(err, data) {
+    delete: function (data, callback) {
+        this.findOneAndRemove({
+            _id: data._id
+        }, function (err, data) {
 
-      if (err) {
-        callback(err, false);
-      } else {
-        callback(null, data);
-      }
-    });
-  },
-    findlimited: function (data, callback) {
-        var returnData = {};
-        var checkfor = new RegExp(data.search, "i");
-        var pagesize = parseInt(data.pagesize);
-        var pagenumber = parseInt(data.pagenumber);
-        var sort={};
-        data.sortnum=parseInt(data.sortnum);
-        sort[data.sort]=data.sortnum;//sort in ascending
-        async.parallel([
-            function (callback) {
-                DocumentationCategory.count({
-                    $or: [{
-                        name: {
-                            '$regex': checkfor
-                        }
-                    }, {
-                        description: {
-                            '$regex': checkfor
-                        }
-                    }]
-                }, callback);
-            },
-            function (callback) {
-                DocumentationCategory.find({
-                    $or: [{
-                        name: {
-                            '$regex': checkfor
-                        }
-                    }, {
-                        description: {
-                            '$regex': checkfor
-                        }
-                    }]
-                },{},{sort:sort}).skip(pagesize*(pagenumber-1)).limit(pagesize).exec(callback);
-            }], function (err, data2) {
             if (err) {
-                callback(err, null);
+                callback(err, false);
             } else {
-                returnData.totalpages = Math.ceil(data2[0] / pagesize);
-                returnData.total = data2[0];
-                returnData.pageno = pagenumber;
-                returnData.data = data2[1];
-                callback(null, returnData);
+                callback(null, data);
             }
         });
+    },
+    findlimited: function (data, callback) {
+        var newreturns = {};
+        newreturns.data = [];
+        var check = new RegExp(data.search, "i");
+        var sort = {};
+        data.sortnum = parseInt(data.sortnum);
+        sort[data.sort] = data.sortnum; //sort in ascending
+        data.pagenumber = parseInt(data.pagenumber);
+        data.pagesize = parseInt(data.pagesize);
+        async.parallel([
+                function (callback) {
+                    DocumentationCategory.count({
+                        $or: [{
+                            name: {
+                                '$regex': check
+                            }
+                        }, {
+                            description: {
+                                '$regex': check
+                            }
+                        }]
+                    }).exec(function (err, number) {
+                        if (err) {
+                            console.log(err);
+                            callback(err, null);
+                        } else if (number && number != "") {
+                            newreturns.total = number;
+                            newreturns.totalpages = Math.ceil(number / data.pagesize);
+                            newreturns.pageno = data.pagenumber;
+                            callback(null, newreturns);
+                        } else {
+                            callback(null, newreturns);
+                        }
+                    });
+                },
+                function (callback) {
+                    DocumentationCategory.find({
+                        $or: [{
+                            name: {
+                                '$regex': check
+                            }
+                        }, {
+                            description: {
+                                '$regex': check
+                            }
+                        }]
+                    }, { sort: sort }).skip(data.pagesize * (data.pagenumber - 1)).limit(data.pagesize).exec(function (err, data2) {
+                        if (err) {
+                            console.log(err);
+                            callback(err, null);
+                        } else if (data2 && data2.length > 0) {
+                            newreturns.data = data2;
+                            callback(null, newreturns);
+                        } else {
+                            callback(null, newreturns);
+                        }
+                    });
+                }
+            ],
+            function (err, data4) {
+                if (err) {
+                    console.log(err);
+                    callback(err, null);
+                } else if (data4) {
+                    callback(null, newreturns);
+                } else {
+                    callback(null, newreturns);
+                }
+            });
     },
 };
 module.exports = _.assign(module.exports, models);

@@ -1,18 +1,11 @@
 /**
  * SuggestionController
  *
- * @description :: Server-side logic for managing suggestions
+ * @description :: Server-side logic for managing Suggestions
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
 module.exports = {
-
-
-
-    /**
-     * `SuggestionController.create()`
-     */
-    create: function (req, res) {
+    create: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
@@ -21,46 +14,81 @@ module.exports = {
         } else {
             res.json({
                 value: false,
-                comment: "No data found"
+                data: "Invalid Call"
             });
         }
     },
-
-    /**
-     * `SuggestionController.delete()`
-     */
-    delete: function (req, res) {
+    delete: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Suggestion.delete(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                Suggestion.delete(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `SuggestionController.viewAll()`
-     */
-    viewAll: function (req, res) {
+    viewAll: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Suggestion.viewAll(req.body, callback);
+        if (req.body) {
+            Suggestion.viewAll(req.body, callback);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `SuggestionController.view()`
-     */
-    view: function (req, res) {
-     function callback(err, data) {
-         Config.GlobalCallback(err, data, res);
-     }
-     Suggestion.view(req.body, callback);
- },
-       findlimited: function (req, res) {
+    view: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Suggestion.findlimited(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                Suggestion.view(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
+    },
+    findlimited: function(req, res) {
+        function callback(err, data) {
+            Config.GlobalCallback(err, data, res);
+        }
+        if (req.body) {
+            if (req.body.pagesize && re.body.pagesize != "" && req.body.pagesize && re.body.pagesize != "") {
+                Suggestion.findlimited(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     }
 };

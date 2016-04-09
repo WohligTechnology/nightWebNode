@@ -4,65 +4,91 @@
  * @description :: Server-side logic for managing Documentations
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
-
-
-
 module.exports = {
-
-    /**
-     * `DocumentationController.create()`
-     */
-    create: function (req, res) {
-     function callback(err, data) {
-         Config.GlobalCallback(err, data, res);
-     }
-     if (req.body) {
-         Documentation.create(req.body, callback);
-     } else {
-         res.json({
-             value: false,
-             comment: "No data found"
-         });
-     }
- },
-
-
-    /**
-     * `DocumentationController.delete()`
-     */
-    delete: function (req, res) {
+    create: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Documentation.delete(req.body, callback);
+        if (req.body) {
+            Documentation.create(req.body, callback);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `DocumentationController.viewAll()`
-     */
-    viewAll: function (req, res) {
+    delete: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Documentation.viewAll(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                Documentation.delete(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `DocumentationController.view()`
-     */
-    view: function (req, res) {
+    viewAll: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Documentation.view(req.body, callback);
+        if (req.body) {
+            Documentation.viewAll(req.body, callback);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-    findlimited: function (req, res) {
+    view: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Documentation.findlimited(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                Documentation.view(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
+    },
+    findlimited: function(req, res) {
+        function callback(err, data) {
+            Config.GlobalCallback(err, data, res);
+        }
+        if (req.body) {
+            if (req.body.pagesize && re.body.pagesize != "" && req.body.pagesize && re.body.pagesize != "") {
+                Documentation.findlimited(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     }
 };

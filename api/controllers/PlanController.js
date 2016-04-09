@@ -1,19 +1,11 @@
 /**
  * PlanController
  *
- * @description :: Server-side logic for managing plans
+ * @description :: Server-side logic for managing Plans
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
-
-
-
 module.exports = {
-
-    /**
-     * `PlanController.create()`
-     */
-    create: function (req, res) {
+    create: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
@@ -22,47 +14,81 @@ module.exports = {
         } else {
             res.json({
                 value: false,
-                comment: "No data found"
+                data: "Invalid Call"
             });
         }
     },
-
-
-    /**
-     * `PlanController.delete()`
-     */
-    delete: function (req, res) {
+    delete: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Plan.delete(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                Plan.delete(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `PlanController.viewAll()`
-     */
-    viewAll: function (req, res) {
+    viewAll: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Plan.viewAll(req.body, callback);
+        if (req.body) {
+            Plan.viewAll(req.body, callback);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `PlanController.view()`
-     */
-    view: function (req, res) {
+    view: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Plan.view(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                Plan.view(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-    findlimited: function (req, res) {
+    findlimited: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Plan.findlimited(req.body, callback);
+        if (req.body) {
+            if (req.body.pagesize && re.body.pagesize != "" && req.body.pagesize && re.body.pagesize != "") {
+                Plan.findlimited(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     }
 };

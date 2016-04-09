@@ -4,16 +4,8 @@
  * @description :: Server-side logic for managing DocumentationCategorys
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
-
-
-
 module.exports = {
-
-    /**
-     * `DocumentationCategoryController.create()`
-     */
-    create: function (req, res) {
+    create: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
@@ -22,47 +14,81 @@ module.exports = {
         } else {
             res.json({
                 value: false,
-                comment: "No data found"
+                data: "Invalid Call"
             });
         }
     },
-
-
-    /**
-     * `DocumentationCategoryController.delete()`
-     */
-    delete: function (req, res) {
+    delete: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        DocumentationCategory.delete(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                DocumentationCategory.delete(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `DocumentationCategoryController.viewAll()`
-     */
-    viewAll: function (req, res) {
+    viewAll: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        DocumentationCategory.viewAll(req.body, callback);
+        if (req.body) {
+            DocumentationCategory.viewAll(req.body, callback);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `DocumentationCategoryController.view()`
-     */
-    view: function (req, res) {
+    view: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        DocumentationCategory.view(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                DocumentationCategory.view(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-    findlimited: function (req, res) {
+    findlimited: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        DocumentationCategory.findlimited(req.body, callback);
+        if (req.body) {
+            if (req.body.pagesize && re.body.pagesize != "" && req.body.pagesize && re.body.pagesize != "") {
+                DocumentationCategory.findlimited(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     }
 };

@@ -18,7 +18,7 @@ var models = {
     //create
     create: function (data, callback) {
         var obj = this(data);
-        obj.timestamp =new Date();
+        obj.timestamp = new Date();
         if (data._id) {
             this.findOneAndUpdate({
                 _id: data._id
@@ -61,51 +61,75 @@ var models = {
             }
         });
     },
-     findlimited: function (data, callback) {
-        var returnData = {};
-        var checkfor = new RegExp(data.search, "i");
-        var pagesize = parseInt(data.pagesize);
-        var pagenumber = parseInt(data.pagenumber);
-        var sort={};
-        data.sortnum=parseInt(data.sortnum);
-        sort[data.sort]=data.sortnum;//sort in ascending
+    findlimited: function (data, callback) {
+        var newreturns = {};
+        newreturns.data = [];
+        var check = new RegExp(data.search, "i");
+        var sort = {};
+        data.sortnum = parseInt(data.sortnum);
+        sort[data.sort] = data.sortnum; //sort in ascending
+        data.pagenumber = parseInt(data.pagenumber);
+        data.pagesize = parseInt(data.pagesize);
         async.parallel([
-            function (callback) {
-                Blog.count({
-                    $or: [{
-                        title: {
-                            '$regex': checkfor
+                function (callback) {
+                    Blog.count({
+                        $or: [{
+                            title: {
+                                '$regex': check
+                            }
+                        }, {
+                            status: {
+                                '$regex': check
+                            }
+                        }]
+                    }).exec(function (err, number) {
+                        if (err) {
+                            console.log(err);
+                            callback(err, null);
+                        } else if (number && number != "") {
+                            newreturns.total = number;
+                            newreturns.totalpages = Math.ceil(number / data.pagesize);
+                            newreturns.pageno = data.pagenumber;
+                            callback(null, newreturns);
+                        } else {
+                            callback(null, newreturns);
                         }
-                    }, {
-                        status: {
-                            '$regex': checkfor
+                    });
+                },
+                function (callback) {
+                    Blog.find({
+                        $or: [{
+                            title: {
+                                '$regex': check
+                            }
+                        }, {
+                            status: {
+                                '$regex': check
+                            }
+                        }]
+                    }, { sort: sort }).skip(data.pagesize * (data.pagenumber - 1)).limit(data.pagesize).exec(function (err, data2) {
+                        if (err) {
+                            console.log(err);
+                            callback(err, null);
+                        } else if (data2 && data2.length > 0) {
+                            newreturns.data = data2;
+                            callback(null, newreturns);
+                        } else {
+                            callback(null, newreturns);
                         }
-                    }]
-                }, callback);
-            },
-            function (callback) {
-                Blog.find({
-                    $or: [{
-                        title: {
-                            '$regex': checkfor
-                        }
-                    }, {
-                        status: {
-                            '$regex': checkfor
-                        }
-                    }]
-                },{},{sort:sort}).skip(pagesize*(pagenumber-1)).limit(pagesize).exec(callback);
-            }], function (err, data2) {
-            if (err) {
-                callback(err, null);
-            } else {
-                returnData.totalpages = Math.ceil(data2[0] / pagesize);
-                returnData.total = data2[0];
-                returnData.pageno = pagenumber;
-                returnData.data = data2[1];
-                callback(null, returnData);
-            }
-        });
+                    });
+                }
+            ],
+            function (err, data4) {
+                if (err) {
+                    console.log(err);
+                    callback(err, null);
+                } else if (data4) {
+                    callback(null, newreturns);
+                } else {
+                    callback(null, newreturns);
+                }
+            });
     },
 };
 module.exports = _.assign(module.exports, models);

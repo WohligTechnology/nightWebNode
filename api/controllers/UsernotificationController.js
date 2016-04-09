@@ -6,13 +6,7 @@
  */
 
 module.exports = {
-
-
-
-    /**
-     * `UsernotificationController.create()`
-     */
-   create: function (req, res) {
+    create: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
@@ -21,60 +15,101 @@ module.exports = {
         } else {
             res.json({
                 value: false,
-                comment: "No data found"
+                data: "Invalid Call"
             });
         }
     },
-
-
-
-    /**
-     * `UsernotificationController.delete()`
-     */
-    delete: function (req, res) {
+    delete: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Usernotification.delete(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                Usernotification.delete(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `UsernotificationController.viewAll()`
-     */
-    viewAll: function (req, res) {
+    viewAll: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Usernotification.viewAll(req.body, callback);
+        if (req.body) {
+            Usernotification.viewAll(req.body, callback);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `UsernotificationController.view()`
-     */
-      view: function (req, res) {
+    view: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Usernotification.view(req.body, callback);
+        if (req.body) {
+            if (req.body._id && req.body._id != "") {
+                Usernotification.view(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     },
-
-
-    /**
-     * `UsernotificationController.viewByUser()`
-     */
-   
-    viewByUser: function (req, res) {
-     function callback(err, data) {
-         Config.GlobalCallback(err, data, res);
-     }
-     Usernotification.viewByUser(req.body, callback);
- },
-    findlimited: function (req, res) {
+    findlimited: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);
         }
-        Suggestion.findlimited(req.body, callback);
+        if (req.body) {
+            if (req.body.pagesize && re.body.pagesize != "" && req.body.pagesize && re.body.pagesize != "") {
+                Usernotification.findlimited(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
+    },
+    viewByUser: function(req, res) {
+        function callback(err, data) {
+            Config.GlobalCallback(err, data, res);
+        }
+        if (req.body) {
+            if (req.body.user && req.body.user != "") {
+                Usernotification.viewByUser(req.body, callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Invalid User-Id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
     }
 };
