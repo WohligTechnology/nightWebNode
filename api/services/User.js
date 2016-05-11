@@ -5,10 +5,16 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 var mongoose = require('mongoose');
+var lodash = require('lodash');
 var md5 = require('md5');
+var request = require('request');
 var sendgrid = require('sendgrid')('');
-var Schema = mongoose.Schema;
+var user = "Vignesh";
+var pass = "d558864b10d78bd95f0e8984faa5bb7d-us13";
+var auth = new Buffer(user + ':' + pass).toString('base64');
+var campaignid = "91b51be488";
 
+var Schema = mongoose.Schema;
 var schema = new Schema({
     name: String,
     email: String,
@@ -34,6 +40,9 @@ module.exports = mongoose.model('User', schema);
 
 var models = {
     register: function(data, callback) {
+        if (data.password && data.password != "") {
+            data.password = md5(data.password);
+        }
         var user = this(data);
         this.count({
             "email": data.email
@@ -43,7 +52,36 @@ var models = {
             } else {
                 if (data2 === 0) {
                     user.save(function(err, data3) {
-                        callback(err, data3);
+                        if (err) {
+                            callback(err, null);
+                        } else {
+                            var split = data.name.split(" ");
+                            request.post({
+                                url: "https://us13.api.mailchimp.com/3.0/lists/" + campaignid + "/members/",
+                                json: {
+                                    "email_address": data3.email,
+                                    "status": "subscribed",
+                                    "merge_fields": {
+                                        "FNAME": split[0],
+                                        "LNAME": split[1]
+                                    }
+                                },
+                                headers: {
+                                    'Authorization': 'Basic ' + auth,
+                                    'Content-Type': 'application/json'
+                                }
+                            }, function(err, http, body) {
+                                if (err) {
+                                    callback({
+                                        value: false,
+                                        comment: err
+                                    });
+                                } else {
+                                    data3.password = '';
+                                    callback(null, data3);
+                                }
+                            });
+                        }
                     });
                 } else {
                     callback("Email already Exists", false);
@@ -176,6 +214,9 @@ var models = {
     forgotPassword: function(data, callback) {
         this.findOne({
             email: data.email
+        }, {
+            password: 0,
+            forgotpassword: 0
         }, function(err, found) {
             if (err) {
                 console.log(err);
@@ -202,7 +243,7 @@ var models = {
                                     to: found.email,
                                     from: "info@wohlig.com",
                                     subject: "One Time Password For Blazen",
-                                    html: "<html><body><p>Dear " + found.name + ",</p><p>Your One Time Password for Blazen Website is " + text + "</p></body></html>"
+                                    html: "<html><body><p>Dear " + found.name + ",</p><p>Your One Time Password for Blazen is " + text + "</p></body></html>"
                                 }, function(err, json) {
                                     if (err) {
                                         callback(err, null);
@@ -226,6 +267,107 @@ var models = {
                 }
             }
         });
-    }
+    },
+    login: function(data, callback) {
+        data.password = md5(data.password);
+        User.findOne({
+            email: data.email,
+            password: data.password
+        }, function(err, data2) {
+            if (err) {
+                console.log(err);
+                callback(er, null);
+            } else {
+                if (_.isEmpty(data2)) {
+                    User.findOne({
+                        email: data.email,
+                        forgotpassword: data.password
+                    }, function(err, data4) {
+                        if (err) {
+                            console.log(err);
+                            callback(err, null);
+                        } else {
+                            if (_.isEmpty(data4)) {
+                                callback(null, {
+                                    comment: "User Not Found"
+                                });
+                            } else {
+                                User.findOneAndUpdate({
+                                    _id: data4._id
+                                }, {
+                                    password: data.password,
+                                    forgotpassword: ""
+                                }, function(err, data5) {
+                                    if (err) {
+                                        console.log(err);
+                                        callback(err, null);
+                                    } else {
+                                        data5.password = "";
+                                        data5.forgotpassword = "";
+                                        callback(null, data5);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    User.findOneAndUpdate({
+                        _id: data2._id
+                    }, {
+                        forgotpassword: ""
+                    }, function(err, data3) {
+                        if (err) {
+                            console.log(err);
+                            callback(err, null);
+                        } else {
+                            data3.password = "";
+                            data3.forgotpassword = "";
+                            callback(null, data3);
+                        }
+                    });
+                }
+            }
+        });
+    },
+    unsubscribe: function(data, callback) {
+        User.findOne({
+            email: data.email
+        }, function(err, data2) {
+            if (err) {
+                console.log(err);
+                callback(err, null);
+            } else {
+                console.log(data2);
+                console.log(data2.campaignid);
+                request.patch({
+                    url: "https://us13.api.mailchimp.com/3.0/lists/" + campaignid + "/members/" + data2.campaignid,
+                    json: {
+                        "status": "unsubscribed"
+                    },
+                    headers: {
+                        'Authorization': 'Basic ' + auth,
+                        'Content-Type': 'application/json'
+                    }
+                }, function(err, http, body) {
+                    if (err) {
+                        callback({
+                            value: false,
+                            comment: err
+                        });
+                    } else {
+                        callback(null, body);
+                    }
+                });
+            }
+        });
+    },
+
+    // createApp: function(data, callback) {
+    //     if (data.name) {
+    //         exec
+    //     } else {
+    //         callback(null, { comment: "Please provide folder name" });
+    //     }
+    // }
 };
 module.exports = _.assign(module.exports, models);

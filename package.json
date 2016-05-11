@@ -21,6 +21,7 @@
     "grunt-sails-linker": "~0.10.1",
     "grunt-sync": "0.2.4",
     "include-all": "~0.1.6",
+    "lodash": "^4.9.0",
     "lwip": "0.0.8",
     "md5": "^2.1.0",
     "mongoose": "^4.4.6",
@@ -31,6 +32,7 @@
     "passport-local": "^1.0.0",
     "passport-twitter": "^1.0.4",
     "rc": "1.0.1",
+    "request": "^2.70.0",
     "sails": "~0.12.1",
     "sails-disk": "~0.10.9",
     "sendgrid": "^2.0.0"

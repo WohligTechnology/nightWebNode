@@ -4,8 +4,7 @@
  * @description :: Server-side logic for managing users
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
-
+var redirect = "http://wohlig.com/";
 
 module.exports = {
     register: function(req, res) {
@@ -16,6 +15,8 @@ module.exports = {
                     value: false
                 });
             } else {
+                req.session.user = data;
+                req.session.save();
                 res.json({
                     data: data,
                     value: true
@@ -43,15 +44,17 @@ module.exports = {
             } else {
                 req.session.user = data;
                 req.session.save();
-                res.json({
-                    data: data,
-                    value: true
-                });
+                res.redirect(redirect);
             }
         };
-        Passport.authenticate('local', {
-            failureRedirect: '/login'
-        }, callback)(req, res);
+        if (req.body.email && req.body.email != "" && req.body.password && req.body.password != "") {
+            User.login(req.body, callback);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Email or Password"
+            });
+        }
     },
     logout: function(req, res) {
         req.session.destroy(function(err) {
@@ -90,10 +93,7 @@ module.exports = {
                     if (err) {
                         res.json(err);
                     } else {
-                        res.json({
-                            data: data,
-                            value: true
-                        });
+                        res.redirect(redirect);
                     }
                 });
             }
@@ -116,10 +116,7 @@ module.exports = {
                     if (err) {
                         res.json(err);
                     } else {
-                        res.json({
-                            data: data,
-                            value: true
-                        });
+                        res.redirect(redirect);
                     }
                 });
             }
@@ -145,10 +142,7 @@ module.exports = {
                     if (err) {
                         res.json(err);
                     } else {
-                        res.json({
-                            data: data,
-                            value: true
-                        });
+                        res.redirect(redirect);
                     }
                 });
             }
@@ -176,10 +170,7 @@ module.exports = {
                     if (err) {
                         res.json(err);
                     } else {
-                        res.json({
-                            data: data,
-                            value: true
-                        });
+                        res.redirect(redirect);
                     }
                 });
             }
@@ -278,6 +269,23 @@ module.exports = {
         if (req.body) {
             if (req.body.email && req.body.email != "") {
                 User.forgotPassword(req.body, res.callback);
+            } else {
+                res.json({
+                    value: false,
+                    data: "Please provide email-id"
+                });
+            }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid Call"
+            });
+        }
+    },
+    unsubscribe: function(req, res) {
+        if (req.body) {
+            if (req.body.email && req.body.email != "") {
+                User.unsubscribe(req.body, res.callback);
             } else {
                 res.json({
                     value: false,

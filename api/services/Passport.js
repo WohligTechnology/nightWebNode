@@ -1,33 +1,8 @@
-var LocalStrategy = require("passport-local");
 var FacebookStrategy = require("passport-facebook");
 var TwitterStrategy = require("passport-twitter");
 var GitHubStrategy = require('passport-github').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 module.exports = require("passport");
-
-module.exports.use(new LocalStrategy({
-        usernameField: 'email',
-        passwordField: 'password',
-    },
-    function(email, password, done) {
-        User.findOne({
-            email: email,
-            password: password
-        }).exec(
-            function(err, data) {
-                if (err) {
-                    done(err, false);
-                } else {
-                    if (_.isEmpty(data)) {
-                        done("Wrong Email or Password", false);
-                    } else {
-                        done(null, data);
-                    }
-                }
-            }
-        );
-    }
-));
 
 module.exports.use(new FacebookStrategy({
         clientID: "141304936259731",
@@ -76,7 +51,6 @@ module.exports.use(new TwitterStrategy({
         callbackURL: "/user/loginTwitter/"
     },
     function(token, tokenSecret, profile, done) {
-
         if (!_.isEmpty(profile)) {
             User.find({
                 "oauthLogin.socialId": profile.id + ""
@@ -176,7 +150,7 @@ module.exports.use(new GitHubStrategy({
                         "status": 1
                     };
                     if (data.length !== 0) {
-                        done(err, profile);
+                        done(err, data);
                     } else {
                         var user = User(usertemp);
                         user.save(function(err, data2) {
