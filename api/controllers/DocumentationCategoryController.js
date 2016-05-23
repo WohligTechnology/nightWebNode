@@ -76,7 +76,7 @@ module.exports = {
             Config.GlobalCallback(err, data, res);
         }
         if (req.body) {
-            if (req.body.pagesize && re.body.pagesize != "" && req.body.pagesize && re.body.pagesize != "") {
+            if (req.body.pagesize && req.body.pagesize !== "" && req.body.pagesize && req.body.pagesize !== "") {
                 DocumentationCategory.findlimited(req.body, callback);
             } else {
                 res.json({

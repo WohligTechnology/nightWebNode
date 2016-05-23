@@ -250,8 +250,8 @@ module.exports = {
             Config.GlobalCallback(err, data, res);
         }
         if (req.body) {
-            if (req.body.pagesize && re.body.pagesize != "" && req.body.pagesize && re.body.pagesize != "") {
-                User.findlimited(req.body, callback);
+          if (req.body.pagesize && req.body.pagesize !== "" && req.body.pagesize && req.body.pagesize !== "") {
+                  User.findlimited(req.body, callback);
             } else {
                 res.json({
                     value: false,
