@@ -4,8 +4,10 @@
  * @description :: Server-side logic for managing users
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-var redirect = "http://wohlig.com/";
-
+// var redirect = "http://192.168.1.114/tesseract/";
+var redirect = "http://blazen.io/my-app";
+var appurl = "http://app.blazen.io/config/callOne";
+var request = require("request");
 module.exports = {
     register: function(req, res) {
         var callback = function(err, data) {
@@ -15,12 +17,19 @@ module.exports = {
                     value: false
                 });
             } else {
-                req.session.user = data;
-                req.session.save();
-                res.json({
-                    data: data,
-                    value: true
-                });
+                if (data._id) {
+                    req.session.user = data;
+                    setTimeout(function() {
+                        res.json({
+                            value: true,
+                            _id: data._id
+                        });
+                    }, 3000);
+                } else {
+                    res.json({
+                        value: false
+                    });
+                }
             }
         };
         if (req.body) {
@@ -42,9 +51,19 @@ module.exports = {
                     value: false
                 });
             } else {
-                req.session.user = data;
-                req.session.save();
-                res.redirect(redirect);
+                if (data._id) {
+                    req.session.user = data;
+                    setTimeout(function() {
+                        res.json({
+                            value: true,
+                            _id: data._id
+                        });
+                    }, 3000);
+                } else {
+                    res.json({
+                        value: false
+                    });
+                }
             }
         };
         if (req.body.email && req.body.email != "" && req.body.password && req.body.password != "") {
@@ -296,6 +315,36 @@ module.exports = {
             res.json({
                 value: false,
                 data: "Invalid Call"
+            });
+        }
+    },
+    createApp: function(req, res) {
+        req.connection.setTimeout(600000);
+        res.connection.setTimeout(600000);
+        if (req.session.user) {
+            req.body.sendme = req.session.user._id;
+            req.body.name = req.session.user.name;
+            request.post({
+                url: appurl,
+                json: req.body
+            }, function(err, http, body) {
+                console.log(body);
+                if (err) {
+                    console.log(err);
+                    res.json({
+                        value: false,
+                        data: err
+                    });
+                } else {
+                    res.json({
+                        value: true
+                    });
+                }
+            });
+        } else {
+            res.json({
+                value: false,
+                data: "User not logged in"
             });
         }
     }

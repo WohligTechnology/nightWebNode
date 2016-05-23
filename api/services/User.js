@@ -55,32 +55,37 @@ var models = {
                         if (err) {
                             callback(err, null);
                         } else {
-                            var split = data.name.split(" ");
-                            request.post({
-                                url: "https://us13.api.mailchimp.com/3.0/lists/" + campaignid + "/members/",
-                                json: {
-                                    "email_address": data3.email,
-                                    "status": "subscribed",
-                                    "merge_fields": {
-                                        "FNAME": split[0],
-                                        "LNAME": split[1]
-                                    }
-                                },
-                                headers: {
-                                    'Authorization': 'Basic ' + auth,
-                                    'Content-Type': 'application/json'
-                                }
-                            }, function(err, http, body) {
-                                if (err) {
-                                    callback({
-                                        value: false,
-                                        comment: err
-                                    });
-                                } else {
-                                    data3.password = '';
-                                    callback(null, data3);
-                                }
-                            });
+                            // if (data.name) {
+                            // var split = data.name.split(" ");
+                            // request.post({
+                            //     url: "https://us13.api.mailchimp.com/3.0/lists/" + campaignid + "/members/",
+                            //     json: {
+                            //         "email_address": data3.email,
+                            //         "status": "subscribed",
+                            //         "merge_fields": {
+                            //             "FNAME": split[0],
+                            //             "LNAME": split[1]
+                            //         }
+                            //     },
+                            //     headers: {
+                            //         'Authorization': 'Basic ' + auth,
+                            //         'Content-Type': 'application/json'
+                            //     }
+                            // }, function(err, http, body) {
+                            //     if (err) {
+                            //         callback({
+                            //             value: false,
+                            //             comment: err
+                            //         });
+                            //     } else {
+                            // data3.password = '';
+                            // callback(null, data3);
+                            //     }
+                            // });
+                            // } else {
+                            data3.password = '';
+                            callback(null, data3);
+                            // }
                         }
                     });
                 } else {
@@ -122,6 +127,7 @@ var models = {
         this.findOne({
             "_id": data._id
         }, {
+            password: 0,
             forgotpassword: 0
         }).exec(callback);
     },
@@ -361,13 +367,5 @@ var models = {
             }
         });
     },
-
-    // createApp: function(data, callback) {
-    //     if (data.name) {
-    //         exec
-    //     } else {
-    //         callback(null, { comment: "Please provide folder name" });
-    //     }
-    // }
 };
 module.exports = _.assign(module.exports, models);
