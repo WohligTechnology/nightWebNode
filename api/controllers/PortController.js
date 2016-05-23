@@ -32,6 +32,19 @@ module.exports = {
             });
         }
     },
+    deleteAll: function(req, res) {
+        function callback(err, data) {
+            Config.GlobalCallback(err, data, res);
+        }
+        if (req.body) {
+            Port.deleteAll(req.body, callback);
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid call"
+            });
+        }
+    },
     getOne: function(req, res) {
         function callback(err, data) {
             Config.GlobalCallback(err, data, res);

@@ -17,7 +17,7 @@ var schema = new Schema({
         type: Date,
         default: Date.now
     },
-    url:String
+    url: String
 });
 
 module.exports = mongoose.model('Port', schema);
@@ -44,6 +44,15 @@ var models = {
             _id: data._id
         }, function(err, data) {
 
+            if (err) {
+                callback(err, false);
+            } else {
+                callback(null, data);
+            }
+        });
+    },
+    deleteAll: function(data, callback) {
+        Port.remove({}, function(err, data) {
             if (err) {
                 callback(err, false);
             } else {
