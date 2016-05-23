@@ -6,6 +6,7 @@
  */
 // var redirect = "http://192.168.1.114/tesseract/";
 var redirect = "http://blazen.io/my-app";
+// var appurl = "http://192.168.1.129:1337/config/callOne";
 var appurl = "http://app.blazen.io/config/callOne";
 var request = require("request");
 module.exports = {
@@ -328,7 +329,6 @@ module.exports = {
                 url: appurl,
                 json: req.body
             }, function(err, http, body) {
-                console.log(body);
                 if (err) {
                     console.log(err);
                     res.json({

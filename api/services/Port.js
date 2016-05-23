@@ -16,7 +16,8 @@ var schema = new Schema({
     timestamp: {
         type: Date,
         default: Date.now
-    }
+    },
+    url:String
 });
 
 module.exports = mongoose.model('Port', schema);
