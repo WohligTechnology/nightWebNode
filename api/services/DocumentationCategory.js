@@ -11,14 +11,14 @@ module.exports = mongoose.model('DocumentationCategory', schema);
 
 var models = {
     //create
-    create: function (data, callback) {
+    create: function(data, callback) {
         var obj = this(data);
         if (data._id) {
             this.findOneAndUpdate({
                 _id: data._id
             }, data, callback);
         } else {
-            obj.save(function (err, data) {
+            obj.save(function(err, data) {
                 if (err) {
                     callback(err, false);
                 } else {
@@ -29,13 +29,13 @@ var models = {
     },
 
     // viewall
-    viewAll: function (data, callback) {
+    viewAll: function(data, callback) {
         this.find().exec(callback);
     },
 
     //    view one
 
-    view: function (data, callback) {
+    view: function(data, callback) {
         this.findOne({
             "_id": data._id
         }).exec(callback);
@@ -43,10 +43,10 @@ var models = {
 
     // delete
 
-    delete: function (data, callback) {
+    delete: function(data, callback) {
         this.findOneAndRemove({
             _id: data._id
-        }, function (err, data) {
+        }, function(err, data) {
 
             if (err) {
                 callback(err, false);
@@ -55,7 +55,7 @@ var models = {
             }
         });
     },
-    findlimited: function (data, callback) {
+    findlimited: function(data, callback) {
         var newreturns = {};
         newreturns.data = [];
         var check = new RegExp(data.search, "i");
@@ -65,7 +65,7 @@ var models = {
         data.pagenumber = parseInt(data.pagenumber);
         data.pagesize = parseInt(data.pagesize);
         async.parallel([
-                function (callback) {
+                function(callback) {
                     DocumentationCategory.count({
                         $or: [{
                             name: {
@@ -76,7 +76,7 @@ var models = {
                                 '$regex': check
                             }
                         }]
-                    }).exec(function (err, number) {
+                    }).exec(function(err, number) {
                         if (err) {
                             console.log(err);
                             callback(err, null);
@@ -90,7 +90,7 @@ var models = {
                         }
                     });
                 },
-                function (callback) {
+                function(callback) {
                     DocumentationCategory.find({
                         $or: [{
                             name: {
@@ -101,7 +101,7 @@ var models = {
                                 '$regex': check
                             }
                         }]
-                    }, { sort: sort }).skip(data.pagesize * (data.pagenumber - 1)).limit(data.pagesize).exec(function (err, data2) {
+                    },{}, { sort: sort }).skip(data.pagesize * (data.pagenumber - 1)).limit(data.pagesize).exec(function(err, data2) {
                         if (err) {
                             console.log(err);
                             callback(err, null);
@@ -114,7 +114,7 @@ var models = {
                     });
                 }
             ],
-            function (err, data4) {
+            function(err, data4) {
                 if (err) {
                     console.log(err);
                     callback(err, null);

@@ -122,7 +122,7 @@ var models = {
                         foldername: {
                             '$regex': check
                         }
-                    }, { sort: sort }).skip(data.pagesize * (data.pagenumber - 1)).limit(data.pagesize).exec(function (err, data2) {
+                    },{}, { sort: sort }).skip(data.pagesize * (data.pagenumber - 1)).limit(data.pagesize).exec(function (err, data2) {
                         if (err) {
                             console.log(err);
                             callback(err, null);
