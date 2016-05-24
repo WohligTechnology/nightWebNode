@@ -1,7 +1,7 @@
 /**
- * PlanController
+ * SubscribeController
  *
- * @description :: Server-side logic for managing Plans
+ * @description :: Server-side logic for managing Subscribes
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
             Config.GlobalCallback(err, data, res);
         }
         if (req.body) {
-            Plan.create(req.body, callback);
+            Subscribe.create(req.body, callback);
         } else {
             res.json({
                 value: false,
@@ -24,7 +24,7 @@ module.exports = {
         }
         if (req.body) {
             if (req.body._id && req.body._id !== "") {
-                Plan.delete(req.body, callback);
+                Subscribe.delete(req.body, callback);
             } else {
                 res.json({
                     value: false,
@@ -43,7 +43,7 @@ module.exports = {
             Config.GlobalCallback(err, data, res);
         }
         if (req.body) {
-            Plan.viewAll(req.body, callback);
+            Subscribe.viewAll(req.body, callback);
         } else {
             res.json({
                 value: false,
@@ -56,8 +56,8 @@ module.exports = {
             Config.GlobalCallback(err, data, res);
         }
         if (req.body) {
-            if (req.body._id && req.body._id !== "") {
-                Plan.view(req.body, callback);
+            if (req.body._id && req.body._id != "") {
+                Subscribe.view(req.body, callback);
             } else {
                 res.json({
                     value: false,
@@ -77,7 +77,7 @@ module.exports = {
         }
         if (req.body) {
           if (req.body.pagesize && req.body.pagesize !== "" && req.body.pagesize && req.body.pagesize !== "") {
-                    Plan.findlimited(req.body, callback);
+                    Subscribe.findlimited(req.body, callback);
             } else {
                 res.json({
                     value: false,
