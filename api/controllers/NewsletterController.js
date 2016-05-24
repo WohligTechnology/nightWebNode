@@ -1,7 +1,7 @@
 /**
- * SubscribeController
+ * NewsletterController
  *
- * @description :: Server-side logic for managing Subscribes
+ * @description :: Server-side logic for managing Newsletters
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
             Config.GlobalCallback(err, data, res);
         }
         if (req.body) {
-            Subscribe.create(req.body, callback);
+            Newsletter.create(req.body, callback);
         } else {
             res.json({
                 value: false,
@@ -24,7 +24,7 @@ module.exports = {
         }
         if (req.body) {
             if (req.body._id && req.body._id !== "") {
-                Subscribe.delete(req.body, callback);
+                Newsletter.delete(req.body, callback);
             } else {
                 res.json({
                     value: false,
@@ -43,7 +43,7 @@ module.exports = {
             Config.GlobalCallback(err, data, res);
         }
         if (req.body) {
-            Subscribe.viewAll(req.body, callback);
+            Newsletter.viewAll(req.body, callback);
         } else {
             res.json({
                 value: false,
@@ -57,7 +57,7 @@ module.exports = {
         }
         if (req.body) {
             if (req.body._id && req.body._id != "") {
-                Subscribe.view(req.body, callback);
+                Newsletter.view(req.body, callback);
             } else {
                 res.json({
                     value: false,
@@ -77,7 +77,7 @@ module.exports = {
         }
         if (req.body) {
           if (req.body.pagesize && req.body.pagesize !== "" && req.body.pagesize && req.body.pagesize !== "") {
-                    Subscribe.findlimited(req.body, callback);
+                    Newsletter.findlimited(req.body, callback);
             } else {
                 res.json({
                     value: false,
