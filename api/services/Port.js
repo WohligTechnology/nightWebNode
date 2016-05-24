@@ -112,7 +112,7 @@ var models = {
     getApp: function(data, callback) {
         this.find({
             user: data.user
-        }).sort().exec(callback);
+        }).sort().lean().exec(callback);
     },
 };
 

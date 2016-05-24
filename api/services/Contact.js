@@ -16,7 +16,6 @@ var schema = new Schema({
 module.exports = mongoose.model('Contact', schema);
 
 var models = {
-    //create
      create: function (data, callback) {
         var contact = this(data);
         if (data._id) {
@@ -33,22 +32,14 @@ var models = {
             });
         }
     },
-
-    // viewall
     viewAll: function(data, callback) {
         this.find().exec(callback);
     },
-
-    //    view one
-
     view: function(data, callback) {
         this.findOne({
             "_id": data._id
         }).exec(callback);
     },
-
-    // delete
-
     delete: function(data, callback) {
         this.findOneAndRemove({
             _id: data._id

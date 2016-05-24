@@ -1,3 +1,5 @@
+var crypto = require('crypto');
+var format = 'aes192';
 module.exports = {
     save: function(req, res) {
         function callback(err, data) {
@@ -105,19 +107,69 @@ module.exports = {
         }
     },
     getApp: function(req, res) {
-        function callback(err, data) {
-            Config.GlobalCallback(err, data, res);
-        }
         if (req.body) {
             if (req.session.user) {
                 req.body.user = req.session.user._id;
-                Port.getApp(req.body, callback);
+                Port.getApp(req.body, function(err, data2) {
+                    if (err) {
+                        res.json({
+                            value: false,
+                            data: err
+                        });
+                    } else {
+                        if (data2 && data2.length > 0) {
+                            var i = 0;
+                            _.each(data2, function(z) {
+                                var currentDate = new Date();
+                                var keyText = z.port + "|" + z.url + "|" + currentDate + "|" + req.session.user._id;
+                                var cipher = crypto.createCipher(format, "lenovo g50");
+                                var crypted = cipher.update(keyText, 'utf8', 'hex');
+                                crypted += cipher.final('hex');
+                                z.key = crypted;
+                                i++;
+                                if (i == data2.length) {
+                                    res.json({
+                                        value: true,
+                                        data: data2
+                                    });
+                                }
+                            });
+                        } else {
+                            res.json({
+                                value: true,
+                                data: data2
+                            });
+                        }
+                    }
+                });
             } else {
                 res.json({
                     value: false,
                     data: "User not logged in"
                 });
             }
+        } else {
+            res.json({
+                value: false,
+                data: "Invalid call"
+            });
+        }
+    },
+    getApp2: function(req, res) {
+        if (req.body) {
+            Port.getApp(req.body, function(err, data2) {
+                if (err) {
+                    res.json({
+                        value: false,
+                        data: err
+                    });
+                } else {
+                    res.json({
+                        value: true,
+                        data: data2
+                    });
+                }
+            });
         } else {
             res.json({
                 value: false,

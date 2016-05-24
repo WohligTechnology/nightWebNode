@@ -6,8 +6,8 @@
  */
 // var redirect = "http://192.168.1.114/tesseract/";
 var redirect = "http://blazen.io/my-app";
-// var appurl = "http://192.168.1.129:1337/config/callOne";
-var appurl = "http://app.blazen.io/config/callOne";
+// var appurl = "http://app.blazen.io/config/callOne";
+var appurl = "http://192.168.1.129:1337/config/callOne";
 var request = require("request");
 module.exports = {
     register: function(req, res) {
@@ -270,8 +270,8 @@ module.exports = {
             Config.GlobalCallback(err, data, res);
         }
         if (req.body) {
-          if (req.body.pagesize && req.body.pagesize !== "" && req.body.pagesize && req.body.pagesize !== "") {
-                  User.findlimited(req.body, callback);
+            if (req.body.pagesize && req.body.pagesize !== "" && req.body.pagesize && req.body.pagesize !== "") {
+                User.findlimited(req.body, callback);
             } else {
                 res.json({
                     value: false,
@@ -337,7 +337,8 @@ module.exports = {
                     });
                 } else {
                     res.json({
-                        value: true
+                        value: true,
+                        data: body.data
                     });
                 }
             });
