@@ -26,13 +26,16 @@ var models = {
 
       // check if it is present
 
-      subscribe.findOne({
-        _id: data._id
+      this.findOne({
+        email: data.email
       }, function(err, data) {
         if (err) {
           callback(err, false);
         } else if (data) {
-          callback(null, data);
+          callback(null, {
+            "message":"Already email present!",
+            "value":true
+          });
         } else {
           subscribe.save(function(err, data) {
             if (err) {
