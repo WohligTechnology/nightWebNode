@@ -34,6 +34,9 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
+  },
+  '/.well-known/acme-challenge/NyBKyzpVGLxQd-fQq_3tiuZmGcIz8DZIV_-5swueTFw' : {
+    view: 'homepage'
   }
 
   /***************************************************************************
