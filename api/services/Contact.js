@@ -17,34 +17,18 @@ module.exports = mongoose.model('Contact', schema);
 
 var models = {
     //create
-    create: function(data, callback) {
+     create: function (data, callback) {
         var contact = this(data);
         if (data._id) {
             this.findOneAndUpdate({
                 _id: data._id
             }, data, callback);
         } else {
-
-            // check if it is present
-
-            this.findOne({
-                email: data.email
-            }, function(err, data) {
+            contact.save(function (err, data) {
                 if (err) {
                     callback(err, false);
-                } else if (data) {
-                    callback(null, {
-                        "message": "Already email present!",
-                        "value": true
-                    });
                 } else {
-                    contact.save(function(err, data) {
-                        if (err) {
-                            callback(err, false);
-                        } else {
-                            callback(null, data);
-                        }
-                    });
+                    callback(null, data);
                 }
             });
         }
@@ -90,11 +74,7 @@ var models = {
                 function(callback) {
                     Contact.count({
                         $or: [{
-                            name: {
-                                '$regex': check
-                            }
-                        }, {
-                            description: {
+                            email: {
                                 '$regex': check
                             }
                         }]
@@ -115,11 +95,7 @@ var models = {
                 function(callback) {
                     Contact.find({
                         $or: [{
-                            name: {
-                                '$regex': check
-                            }
-                        }, {
-                            description: {
+                            email: {
                                 '$regex': check
                             }
                         }]

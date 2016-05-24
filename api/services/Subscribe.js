@@ -89,11 +89,7 @@ var models = {
         function(callback) {
           Subscribe.count({
             $or: [{
-              name: {
-                '$regex': check
-              }
-            }, {
-              description: {
+              email: {
                 '$regex': check
               }
             }]
@@ -114,11 +110,7 @@ var models = {
         function(callback) {
           Subscribe.find({
             $or: [{
-              name: {
-                '$regex': check
-              }
-            }, {
-              description: {
+              email: {
                 '$regex': check
               }
             }]
