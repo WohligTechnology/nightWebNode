@@ -35,7 +35,7 @@ module.exports.routes = {
   '/': {
     view: 'homepage'
   },
-  '/.well-known/acme-challenge/NyBKyzpVGLxQd-fQq_3tiuZmGcIz8DZIV_-5swueTFw' : {
+  '/.well-known/acme-challenge/x7qOBmr4ORY84i84dC-5ifnvsKYjwm4HY7tbxp2bbMk' : {
     view: 'homepage'
   }
 
