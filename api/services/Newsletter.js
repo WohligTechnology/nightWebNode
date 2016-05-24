@@ -8,8 +8,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
-  email: String,
-  timestamp: Date
+  email:  { type: String, default: "" },
+   timestamp:{ type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('Subscribe', schema);

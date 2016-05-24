@@ -8,9 +8,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
-    email: String,
-    message: String,
-    timestamp:Date
+    email:  { type: String, default: "" },
+    message: { type: String, default: "" },
+    timestamp:{ type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('Contact', schema);
