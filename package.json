@@ -25,6 +25,7 @@
     "lodash": "^4.9.0",
     "lwip": "0.0.8",
     "md5": "^2.1.0",
+    "mongodb": "^2.1.19",
     "mongoose": "^4.4.6",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.0",
