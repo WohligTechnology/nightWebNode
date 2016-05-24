@@ -21,6 +21,7 @@
     "grunt-sails-linker": "~0.10.1",
     "grunt-sync": "0.2.4",
     "include-all": "~0.1.6",
+    "letsencrypt-express": "^1.1.5",
     "lodash": "^4.9.0",
     "lwip": "0.0.8",
     "md5": "^2.1.0",
