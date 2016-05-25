@@ -46,8 +46,8 @@ module.exports.use(new FacebookStrategy({
 ));
 
 module.exports.use(new TwitterStrategy({
-        consumerKey: "gZPPSIqZHL3mqlgq76bBc4Yqq",
-        consumerSecret: "FGZTNSrJjztzlSsoX5TzvnWzVTFfpbw4D8veCFH8ME75Jup2CK",
+        consumerKey: "ScyOXj37xkvmkY9hi6edFsLaz",
+        consumerSecret: "4J1vaHxX1rr84ygGHBrADkFQS32Nb9lNkHKwRuM4ykfwgVj9qh",
         callbackURL: "/user/loginTwitter/"
     },
     function(token, tokenSecret, profile, done) {
@@ -87,8 +87,8 @@ module.exports.use(new TwitterStrategy({
 
 
 module.exports.use(new GoogleStrategy({
-        clientID: "265970827010-j10v7hj6j1gs8pvsu9vcs421c0atd3ic.apps.googleusercontent.com",
-        clientSecret: "HCcktl431UlXsdiOa78Cu5VK",
+        clientID: "626092399545-aak7vm4u6on9g26dibu698df2fn7hoeq.apps.googleusercontent.com",
+        clientSecret: "-QQY_6cOxFCeVs9VkSlwXdF7",
         callbackURL: "/user/loginGoogleCallback"
     },
     function(token, tokenSecret, profile, done) {
