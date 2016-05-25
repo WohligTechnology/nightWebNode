@@ -9,10 +9,7 @@ var lodash = require('lodash');
 var md5 = require('md5');
 var request = require('request');
 var sendgrid = require('sendgrid')('');
-var user = "Vignesh";
-var pass = "d558864b10d78bd95f0e8984faa5bb7d-us13";
-var auth = new Buffer(user + ':' + pass).toString('base64');
-var campaignid = "91b51be488";
+var fs = require('fs');
 
 var Schema = mongoose.Schema;
 var schema = new Schema({
@@ -55,37 +52,27 @@ var models = {
                         if (err) {
                             callback(err, null);
                         } else {
-                            // if (data.name) {
-                            // var split = data.name.split(" ");
-                            // request.post({
-                            //     url: "https://us13.api.mailchimp.com/3.0/lists/" + campaignid + "/members/",
-                            //     json: {
-                            //         "email_address": data3.email,
-                            //         "status": "subscribed",
-                            //         "merge_fields": {
-                            //             "FNAME": split[0],
-                            //             "LNAME": split[1]
-                            //         }
-                            //     },
-                            //     headers: {
-                            //         'Authorization': 'Basic ' + auth,
-                            //         'Content-Type': 'application/json'
-                            //     }
-                            // }, function(err, http, body) {
-                            //     if (err) {
-                            //         callback({
-                            //             value: false,
-                            //             comment: err
-                            //         });
-                            //     } else {
-                            // data3.password = '';
-                            // callback(null, data3);
-                            //     }
-                            // });
-                            // } else {
-                            data3.password = '';
-                            callback(null, data3);
-                            // }
+                            fs.readFile("./assets/emailers/signup.html", 'utf8', function(err, readme) {
+                                if (err) {
+                                    console.log(err);
+                                    callback(err, null);
+                                } else {
+                                    readme = readme.replace("###Name", data.name);
+                                    sendgrid.send({
+                                        to: data.email,
+                                        from: "devblazen@gmail.com",
+                                        subject: "Welcome to Blazen",
+                                        html: readme
+                                    }, function(err, json) {
+                                        if (err) {
+                                            callback(err, null);
+                                        } else {
+                                            data3.password = '';
+                                            callback(null, data3);
+                                        }
+                                    });
+                                }
+                            });
                         }
                     });
                 } else {
@@ -245,17 +232,26 @@ var models = {
                                 console.log(err);
                                 callback(err, null);
                             } else {
-                                sendgrid.send({
-                                    to: found.email,
-                                    from: "info@wohlig.com",
-                                    subject: "One Time Password For Blazen",
-                                    html: "<html><body><p>Dear " + found.name + ",</p><p>Your One Time Password for Blazen is " + text + "</p></body></html>"
-                                }, function(err, json) {
+                                fs.readFile("./assets/emailers/forgot.html", 'utf8', function(err, readme) {
                                     if (err) {
+                                        console.log(err);
                                         callback(err, null);
                                     } else {
-                                        callback(null, {
-                                            comment: "Mail Sent"
+                                        readme = readme.replace("###Name", found.name);
+                                        readme = readme.replace("###Text", text);
+                                        sendgrid.send({
+                                            to: data.email,
+                                            from: "devblazen@gmail.com",
+                                            subject: "Password For Blazen",
+                                            html: readme
+                                        }, function(err, json) {
+                                            if (err) {
+                                                callback(err, null);
+                                            } else {
+                                                callback(null, {
+                                                    comment: "Mail Sent"
+                                                });
+                                            }
                                         });
                                     }
                                 });
