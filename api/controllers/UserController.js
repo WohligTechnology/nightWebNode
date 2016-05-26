@@ -325,6 +325,8 @@ module.exports = {
         if (req.session.user) {
             req.body.sendme = req.session.user._id;
             req.body.name = req.session.user.name;
+            console.log(req.body);
+            console.log(req.session.user._id);
             request.post({
                 url: appurl,
                 json: req.body
