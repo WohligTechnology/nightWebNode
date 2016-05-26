@@ -5,7 +5,7 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 // var redirect = "http://192.168.1.114/tesseract/";
-var redirect = "http://blazen.io/my-app";
+var redirect = "https://blazen.io/my-app";
 var appurl = "http://app.blazen.io/config/callOne";
 // var appurl = "http://192.168.1.129:1337/config/callOne";
 var request = require("request");
