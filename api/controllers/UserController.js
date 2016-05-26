@@ -329,6 +329,7 @@ module.exports = {
                 url: appurl,
                 json: req.body
             }, function(err, http, body) {
+                console.log(body);
                 if (err) {
                     console.log(err);
                     res.json({
