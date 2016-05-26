@@ -323,10 +323,9 @@ module.exports = {
         req.connection.setTimeout(600000);
         res.connection.setTimeout(600000);
         if (req.session.user) {
+            console.log(req.session.user);
             req.body.sendme = req.session.user._id;
             req.body.name = req.session.user.name;
-            console.log(req.body);
-            console.log(req.session.user._id);
             request.post({
                 url: appurl,
                 json: req.body
