@@ -12,7 +12,7 @@ module.exports.use(new FacebookStrategy({
     },
     function(accessToken, refreshToken, profile, done) {
         if (!_.isEmpty(profile)) {
-            User.find({
+            User.findOne({
                 "oauthLogin.socialId": profile.id + ""
             }).exec(function(err, data) {
                 if (err) {
@@ -52,7 +52,7 @@ module.exports.use(new TwitterStrategy({
     },
     function(token, tokenSecret, profile, done) {
         if (!_.isEmpty(profile)) {
-            User.find({
+            User.findOne({
                 "oauthLogin.socialId": profile.id + ""
             }).exec(function(err, data) {
                 if (err) {
@@ -93,7 +93,7 @@ module.exports.use(new GoogleStrategy({
     },
     function(token, tokenSecret, profile, done) {
         if (!_.isEmpty(profile)) {
-            User.find({
+            User.findOne({
                 "oauthLogin.socialId": profile.id + ""
             }).exec(function(err, data) {
                 if (err) {
@@ -135,7 +135,7 @@ module.exports.use(new GitHubStrategy({
     function(accessToken, refreshToken, profile, done) {
         if (!_.isEmpty(profile)) {
             var usertemp = {};
-            User.find({
+            User.findOne({
                 "oauthLogin.socialId": profile.id + ""
             }).exec(function(err, data) {
                 if (err) {
