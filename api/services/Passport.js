@@ -27,13 +27,13 @@ module.exports.use(new FacebookStrategy({
                         "status": 1
                     };
 
-                    if (data.length !== 0) {
-                        done(err, data);
-                    } else {
+                    if (_.isEmpty(data)) {
                         var user = User(usertemp);
                         user.save(function(err, data2) {
                             done(err, data2);
                         });
+                    } else {
+                        done(err, data);
                     }
 
                 }
@@ -67,14 +67,15 @@ module.exports.use(new TwitterStrategy({
                         "status": 1
                     };
 
-                    if (data.length !== 0) {
-                        done(err, data);
-                    } else {
+                    if (_.isEmpty(data)) {
                         var user = User(usertemp);
                         user.save(function(err, data2) {
                             done(err, data2);
                         });
+                    } else {
+                        done(err, data);
                     }
+
 
                 }
             });
@@ -108,14 +109,15 @@ module.exports.use(new GoogleStrategy({
                         "status": 1
                     };
 
-                    if (data.length !== 0) {
-                        done(err, data);
-                    } else {
+                    if (_.isEmpty(data)) {
                         var user = User(usertemp);
                         user.save(function(err, data2) {
                             done(err, data2);
                         });
+                    } else {
+                        done(err, data);
                     }
+
 
                 }
             });
@@ -149,14 +151,15 @@ module.exports.use(new GitHubStrategy({
                         }],
                         "status": 1
                     };
-                    if (data.length !== 0) {
-                        done(err, data);
-                    } else {
+                    if (_.isEmpty(data)) {
                         var user = User(usertemp);
                         user.save(function(err, data2) {
                             done(err, data2);
                         });
+                    } else {
+                        done(err, data);
                     }
+
 
                 }
             });
