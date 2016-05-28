@@ -30,8 +30,7 @@ var models = {
                     callback(err, false);
                 } else if (data) {
                     callback(null, {
-                        "message": "Already email present!",
-                        "value": true
+                        message: "Already email present!"
                     });
                 } else {
                     subscribe.save(function(err, data) {

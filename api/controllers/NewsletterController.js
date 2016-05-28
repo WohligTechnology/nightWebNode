@@ -6,11 +6,27 @@
  */
 module.exports = {
     create: function(req, res) {
-        function callback(err, data) {
-            Config.GlobalCallback(err, data, res);
-        }
         if (req.body) {
-            Newsletter.create(req.body, callback);
+            Newsletter.create(req.body, function(err, data) {
+                if (err) {
+                    res.json({
+                        value: false,
+                        data: err
+                    });
+                } else {
+                    if (data._id) {
+                        res.json({
+                            value: true,
+                            data: data
+                        });
+                    } else {
+                        res.json({
+                            value: false,
+                            data: data
+                        });
+                    }
+                }
+            });
         } else {
             res.json({
                 value: false,
@@ -76,8 +92,8 @@ module.exports = {
             Config.GlobalCallback(err, data, res);
         }
         if (req.body) {
-          if (req.body.pagesize && req.body.pagesize !== "" && req.body.pagesize && req.body.pagesize !== "") {
-                    Newsletter.findlimited(req.body, callback);
+            if (req.body.pagesize && req.body.pagesize !== "" && req.body.pagesize && req.body.pagesize !== "") {
+                Newsletter.findlimited(req.body, callback);
             } else {
                 res.json({
                     value: false,
