@@ -288,7 +288,23 @@ module.exports = {
     forgotPassword: function(req, res) {
         if (req.body) {
             if (req.body.email && req.body.email != "") {
-                User.forgotPassword(req.body, res.callback);
+                User.forgotPassword(req.body, function(err, data) {
+                    if (err) {
+                        res.json(err);
+                    } else {
+                        if (data.comment == "Mail Sent") {
+                            res.json({
+                                value: true,
+                                data: data
+                            });
+                        } else {
+                            res.json({
+                                value: false,
+                                data: data
+                            });
+                        }
+                    }
+                });
             } else {
                 res.json({
                     value: false,

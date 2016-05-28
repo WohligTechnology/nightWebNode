@@ -1,5 +1,5 @@
 /**
- * Subscribe.js
+ * Newsletter.js
  *
  * @description :: TODO: You might write a short summary of how this model works and what it represents here.
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
@@ -12,7 +12,7 @@ var schema = new Schema({
     timestamp: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Subscribe', schema);
+module.exports = mongoose.model('Newsletter', schema);
 
 var models = {
     //create
@@ -76,7 +76,7 @@ var models = {
         data.pagesize = parseInt(data.pagesize);
         async.parallel([
                 function(callback) {
-                    Subscribe.count({
+                    Newsletter.count({
                         $or: [{
                             email: {
                                 '$regex': check
@@ -97,7 +97,7 @@ var models = {
                     });
                 },
                 function(callback) {
-                    Subscribe.find({
+                    Newsletter.find({
                         $or: [{
                             email: {
                                 '$regex': check
